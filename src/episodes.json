@@ -1,0 +1,53 @@
+[
+  {
+    "id": "VID_002",
+    "title": "Build a Multi-Agent System in Python with MCP (Calendar + Memory + Slack)",
+    "description": "Production architecture for distributed micro-agents in Python. Learn how Model Context Protocol (MCP) and FastAPI enable isolated, deterministic multi-agent systems without framework bloat.",
+    "track": "Multi-Agent Systems (Python + MCP)",
+    "track_slug": "multi-agent",
+    "youtube_url": "https://www.youtube.com/watch?v=Q4apC-tffJc",
+    "video_id": "Q4apC-tffJc",
+    "thumbnail_url": "https://img.youtube.com/vi/Q4apC-tffJc/maxresdefault.jpg",
+    "github_repo": "https://github.com/NexosAILab/multi-agent-mcp-starter",
+    "release_date": "2026-11-15",
+    "duration": "09:45",
+    "stack": [
+      "Python 3.12",
+      "MCP",
+      "FastAPI",
+      "AsyncIO",
+      "ZoneInfo"
+    ],
+    "metrics": {
+      "latency": "8.8s end-to-end",
+      "context_leakage": "0%",
+      "architecture": "Decoupled Micro-Agents"
+    },
+    "featured": true
+  },
+  {
+    "id": "VID_001",
+    "title": "Build Your First Autonomous AI Agent in 15 Minutes (No Code)",
+    "description": "Deploy a self-healing, multi-step autonomous AI agent in under 15 minutes without writing a single line of code. Covers webhook ingestion, payload normalization, and enterprise state sync.",
+    "track": "Enterprise n8n Builds",
+    "track_slug": "n8n",
+    "youtube_url": "https://www.youtube.com/watch?v=hI8xuR7S49U",
+    "video_id": "hI8xuR7S49U",
+    "thumbnail_url": "https://img.youtube.com/vi/hI8xuR7S49U/maxresdefault.jpg",
+    "github_repo": "https://github.com/NexosAILab/autonomous-agent-starter",
+    "release_date": "2026-11-14",
+    "duration": "08:10",
+    "stack": [
+      "n8n",
+      "Webhooks",
+      "REST APIs",
+      "Autonomous Agents"
+    ],
+    "metrics": {
+      "setup_time": "15m",
+      "code_required": "0 lines",
+      "reliability": "Self-healing"
+    },
+    "featured": false
+  }
+]
