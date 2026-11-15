@@ -8,12 +8,13 @@ import {
   Mail,
   Play,
   Code2,
-  Cpu,
-  ArrowUpRight,
   Sparkles,
   GitBranch,
-  Terminal as TerminalIcon,
-  ChevronRight
+  Search,
+  BookOpen,
+  Boxes,
+  Radio,
+  ExternalLink
 } from 'lucide-react';
 
 interface Episode {
@@ -35,122 +36,137 @@ interface Episode {
 
 export function App() {
   const [lang, setLang] = useState<'en' | 'es'>('en');
+  const [activeTab, setActiveTab] = useState<'episodes' | 'starters' | 'standards' | 'consulting'>('episodes');
   const [filter, setFilter] = useState<'all' | 'multi-agent' | 'n8n'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const episodes = episodesData as unknown as Episode[];
 
-  const filteredEpisodes = filter === 'all' 
-    ? episodes 
-    : episodes.filter(ep => ep.track_slug === filter);
+  const filteredEpisodes = episodes.filter(ep => {
+    const matchesTrack = filter === 'all' || ep.track_slug === filter;
+    const matchesSearch = searchQuery === '' || 
+      ep.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ep.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ep.stack.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesTrack && matchesSearch;
+  });
 
-  // i18n Dictionary
   const t = {
     en: {
-      tag: "TIER-1 OPEN SOURCE & INDUSTRIAL AGENT ENGINEERING",
+      navEpisodes: "Episodes & Demos",
+      navStarters: "Open Source Starters",
+      navStandards: "Engineering Standards",
+      navConsulting: "B2B Consulting",
+      heroBadge: "TIER-1 OPEN SOURCE & DISTRIBUTED AGENT LAB",
       heroTitle1: "Production Multi-Agent Systems & ",
       heroHighlight: "Deterministic Workflows.",
-      heroSubtitle: "We build and benchmark resilient agent swarms for enterprise environments. Cutting through framework bloat to deliver sub-second tool routing, zero UTC drift, and reproducible open-source starters.",
-      exploreBtn: "Explore Code Starters",
-      cloneVid002: "Clone VID_002 Starter",
-      card1Tag: "PROTOCOL STANDARD",
-      card1Title: "Model Context Protocol",
-      card1Desc: "Anthropic STDIO & SSE tools for isolated micro-agents without runtime memory leaks.",
-      card2Tag: "DETERMINISTIC TIME",
-      card2Title: "Zero UTC Drift",
-      card2Desc: "Strict IANA timezone normalization with native Python 3.12 zoneinfo.",
-      card3Tag: "PRODUCTION CODE",
-      card3Title: "100% Tested Starters",
-      card3Desc: "Full pytest verification suites, Dockerized environments, and literate documentation.",
-      catTag: "RELEASES & ARCHITECTURE BENCHMARKS",
-      catTitle: "Production Episode Catalog",
-      catDesc: "Direct access to full videos, reproducible GitHub starters, and performance telemetry.",
+      heroSubtitle: "We benchmark and build resilient multi-agent swarms for enterprise environments. Microservices over monolithic bloat, zero UTC drift, and reproducible open-source starters.",
+      statEpisodes: "2 Production Videos",
+      statStarters: "100% Tested Starters",
+      statReliability: "Zero UTC Drift",
+      statProtocol: "MCP Standardized",
+      searchPlaceholder: "Search architectures, protocols, libraries (e.g. MCP, FastAPI, n8n, ZoneInfo)...",
       filterAll: "All Releases",
-      filterAgent: "Multi-Agent (Python)",
+      filterAgent: "Multi-Agent Systems",
       filterN8n: "Enterprise n8n",
+      cardWatch: "Watch Video",
+      cardClone: "Clone Code",
       released: "RELEASED",
-      watchVideo: "Watch Deep Dive",
-      cloneStarter: "Clone Starter",
-      b2bTag: "B2B SYSTEMS ENGINEERING & ARCHITECTURE",
-      b2bTitle: "Scale Custom Multi-Agent Systems in Your Enterprise",
-      b2bDesc: "We partner directly with technical teams and founders to design and implement deterministic micro-agent swarms, Model Context Protocol servers, and enterprise automation infrastructure.",
-      b2bBenefit1: "Custom Model Context Protocol (MCP) server development",
-      b2bBenefit2: "Deterministic agent orchestration with zero context runaway",
-      b2bBenefit3: "Self-healing enterprise n8n clusters and webhook processing",
-      b2bBoxTitle: "Schedule Technical Consultation",
-      b2bBoxDesc: "Contact our engineering team directly for architectural reviews, proof of concepts, or enterprise consulting:",
-      b2bBoxBtn: "Contact Architecture Lab",
-      directEmail: "Direct email:",
-      footerNotice: "Production-grade AI engineering. Open-source under MIT License."
+      startersTitle: "Official Open Source Repository Catalog",
+      startersSubtitle: "Tested templates, manifests, and workers designed for horizontal scaling.",
+      standardsTitle: "Nexos AI Lab Engineering Standards",
+      standardsSubtitle: "Core architectural invariants governing our YouTube pipeline and codebases.",
+      rule1Title: "1. Protocol Decoupling via Model Context Protocol (MCP)",
+      rule1Desc: "Never hardcode vendor SDKs inside business logic. Tools must be exposed via standardized STDIO/SSE JSON-RPC manifests to allow swapping LLM models with zero refactoring.",
+      rule2Title: "2. Deterministic Time & ZoneInfo Normalization",
+      rule2Desc: "All agent calendar bookings and scheduled tasks must execute strict timezone conversions using Python native zoneinfo, preventing silent UTC-drift bugs.",
+      rule3Title: "3. AsyncIO Concurrency & Cascade Protection",
+      rule3Desc: "Workers execute concurrently via asyncio.gather with explicit timeouts and isolated error boundaries, preventing single-worker crashes from collapsing the swarm.",
+      rule4Title: "4. Literate Documentation & Verified Pytest Suites",
+      rule4Desc: "Every open-source starter repository must ship with automated verification tests and a Mermaid architectural flowchart.",
+      consultingTitle: "Need Custom Multi-Agent Pipelines in Your Enterprise?",
+      consultingSubtitle: "We partner with engineering organizations to architect and deploy deterministic agent swarms, private MCP servers, and enterprise automation infrastructure.",
+      b2bFeature1: "Private Model Context Protocol (MCP) server integration",
+      b2bFeature2: "Deterministic agent orchestration with zero context runaway",
+      b2bFeature3: "Self-healing enterprise n8n cluster deployments & webhook processing",
+      scheduleBtn: "Schedule Technical Consultation",
+      footerDesc: "Production-grade AI engineering. Open-source under MIT License."
     },
     es: {
-      tag: "INGENIERÍA DE AGENTES INDUSTRIALES Y CÓDIGO ABIERTO TIER-1",
+      navEpisodes: "Episodios y Demos",
+      navStarters: "Repositorios Starters",
+      navStandards: "Estándares de Ingeniería",
+      navConsulting: "Consultoría B2B",
+      heroBadge: "LABORATORIO DE AGENTES DISTRIBUIDOS Y CÓDIGO ABIERTO TIER-1",
       heroTitle1: "Sistemas Multi-Agente en Producción y ",
       heroHighlight: "Flujos Deterministas.",
-      heroSubtitle: "Diseñamos y medimos enjambres de agentes resilientes para entornos empresariales. Eliminamos el exceso de frameworks para lograr enrutamiento sub-segundo, cero desfase de zonas horarias y starters reproducibles.",
-      exploreBtn: "Explorar Código Starter",
-      cloneVid002: "Clonar Starter VID_002",
-      card1Tag: "ESTÁNDAR DE PROTOCOLO",
-      card1Title: "Model Context Protocol",
-      card1Desc: "Herramientas Anthropic por STDIO y SSE para microagentes aislados sin fugas de memoria en runtime.",
-      card2Tag: "TIEMPO DETERMINISTA",
-      card2Title: "Cero Desfase UTC",
-      card2Desc: "Normalización estricta de zonas horarias IANA con la librería nativa zoneinfo de Python 3.12.",
-      card3Tag: "CÓDIGO DE PRODUCCIÓN",
-      card3Title: "Starters 100% Probados",
-      card3Desc: "Suites de prueba completas en pytest, entornos Dockerizados y documentación forense.",
-      catTag: "LANZAMIENTOS Y BENCHMARKS DE ARQUITECTURA",
-      catTitle: "Catálogo de Episodios en Producción",
-      catDesc: "Acceso directo a videos maestros, repositorios starter en GitHub y telemetría de rendimiento.",
-      filterAll: "Todos los Lanzamientos",
-      filterAgent: "Multi-Agente (Python)",
+      heroSubtitle: "Diseñamos y medimos enjambres de agentes resilientes para entornos empresariales. Microservicios sobre monolitos inflados, cero desfase de zonas horarias y starters reproducibles.",
+      statEpisodes: "2 Videos en Producción",
+      statStarters: "Starters 100% Probados",
+      statReliability: "Cero Desfase UTC",
+      statProtocol: "Estándar MCP",
+      searchPlaceholder: "Buscar arquitecturas, protocolos o librerías (ej. MCP, FastAPI, n8n, ZoneInfo)...",
+      filterAll: "Todos los Episodios",
+      filterAgent: "Sistemas Multi-Agente",
       filterN8n: "Automatización n8n",
+      cardWatch: "Ver Video",
+      cardClone: "Clonar Código",
       released: "PUBLICADO",
-      watchVideo: "Ver Video Maestro",
-      cloneStarter: "Clonar Starter",
-      b2bTag: "INGENIERÍA Y ARQUITECTURA DE SISTEMAS B2B",
-      b2bTitle: "Escala Sistemas Multi-Agente a Medida en tu Empresa",
-      b2bDesc: "Trabajamos directamente con equipos técnicos y fundadores para diseñar e implementar enjambres de microagentes deterministas, servidores MCP y arquitectura de automatización empresarial.",
-      b2bBenefit1: "Desarrollo de servidores privados Model Context Protocol (MCP)",
-      b2bBenefit2: "Orquestación determinista de agentes con cero saturación de contexto",
-      b2bBenefit3: "Despliegue de clústeres resilientes de n8n y procesamiento de webhooks",
-      b2bBoxTitle: "Agendar Consulta Técnica",
-      b2bBoxDesc: "Contacta directamente a nuestro laboratorio de ingeniería para revisiones arquitectónicas o consultoría empresarial:",
-      b2bBoxBtn: "Contactar al Equipo de Arquitectura",
-      directEmail: "Correo directo:",
-      footerNotice: "Ingeniería de Inteligencia Artificial para Producción. Licencia MIT."
+      startersTitle: "Catálogo Oficial de Repositorios Open Source",
+      startersSubtitle: "Plantillas probadas, manifiestos y workers diseñados para escalar horizontalmente.",
+      standardsTitle: "Estándares de Ingeniería de Nexos AI Lab",
+      standardsSubtitle: "Invariantes arquitectónicas obligatorias que rigen nuestro pipeline y código.",
+      rule1Title: "1. Desacoplamiento de Protocolo vía Model Context Protocol (MCP)",
+      rule1Desc: "Prohibido acoplar SDKs propietarios a la lógica de negocio. Las herramientas se exponen mediante manifiestos estandarizados JSON-RPC (STDIO/SSE) para cambiar modelos sin refactorizar.",
+      rule2Title: "2. Tiempo Determinista y Normalización con ZoneInfo",
+      rule2Desc: "Todo agendamiento de agentes debe convertir zonas horarias estrictamente con zoneinfo de Python nativo, eliminando bugs silenciosos de desfase UTC.",
+      rule3Title: "3. Concurrencia AsyncIO y Aislamiento de Fallos",
+      rule3Desc: "Los workers ejecutan concurrentemente con asyncio.gather, timeouts explícitos y aislamiento de errores, evitando que la caída de un worker derrumbe el swarm.",
+      rule4Title: "4. Documentación Exhaustiva y Suites de Prueba en Pytest",
+      rule4Desc: "Todo repositorio starter debe incluir tests automatizados obligatorios y un diagrama Mermaid de arquitectura técnica.",
+      consultingTitle: "¿Necesitas Pipelines Multi-Agente a Medida en tu Empresa?",
+      consultingSubtitle: "Trabajamos junto a equipos técnicos para diseñar e implementar enjambres deterministas, servidores MCP privados y arquitectura de automatización empresarial.",
+      b2bFeature1: "Desarrollo de servidores privados Model Context Protocol (MCP)",
+      b2bFeature2: "Orquestación determinista de agentes con cero saturación de contexto",
+      b2bFeature3: "Despliegue de clústeres resilientes de n8n y procesamiento de webhooks",
+      scheduleBtn: "Agendar Consulta Técnica",
+      footerDesc: "Ingeniería de Inteligencia Artificial para Producción. Licencia MIT."
     }
   }[lang];
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
       
-      {/* Top Navbar with Official Brand Logo */}
+      {/* Top Navbar */}
       <header style={{
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         position: 'sticky',
         top: 0,
-        backgroundColor: 'rgba(7, 10, 18, 0.85)',
+        backgroundColor: 'rgba(7, 10, 18, 0.9)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         zIndex: 50
       }}>
         <div style={{
-          maxWidth: '1280px',
+          maxWidth: '1360px',
           margin: '0 auto',
           padding: '12px 24px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '16px'
         }}>
           {/* Brand Logo & Name */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{
               position: 'relative',
-              width: '40px',
-              height: '40px',
+              width: '38px',
+              height: '38px',
               borderRadius: '10px',
               overflow: 'hidden',
-              boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)',
-              border: '1px solid rgba(0, 229, 255, 0.4)',
+              boxShadow: '0 0 25px rgba(0, 229, 255, 0.4)',
+              border: '1px solid rgba(0, 229, 255, 0.5)',
               background: '#0B0F19'
             }}>
               <img 
@@ -174,18 +190,103 @@ export function App() {
                   border: '1px solid rgba(0, 229, 255, 0.3)',
                   letterSpacing: '0.8px'
                 }}>
-                  ENGINEERING
+                  PLATFORM
                 </span>
               </div>
-              <div style={{ fontSize: '11px', color: '#9CA3AF', letterSpacing: '0.5px' }}>
+              <div style={{ fontSize: '11px', color: '#9CA3AF' }}>
                 Autonomous Architectures & Open Source Starters
               </div>
             </div>
           </div>
 
+          {/* Scalable Navigation Tabs */}
+          <nav style={{
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            borderRadius: '10px',
+            padding: '4px',
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <button
+              onClick={() => setActiveTab('episodes')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: '7px',
+                fontSize: '12px',
+                fontWeight: 700,
+                backgroundColor: activeTab === 'episodes' ? '#00E5FF' : 'transparent',
+                color: activeTab === 'episodes' ? '#070A12' : '#9CA3AF',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Radio size={14} />
+              <span>{t.navEpisodes}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('starters')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: '7px',
+                fontSize: '12px',
+                fontWeight: 700,
+                backgroundColor: activeTab === 'starters' ? '#00E5FF' : 'transparent',
+                color: activeTab === 'starters' ? '#070A12' : '#9CA3AF',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Boxes size={14} />
+              <span>{t.navStarters}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('standards')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: '7px',
+                fontSize: '12px',
+                fontWeight: 700,
+                backgroundColor: activeTab === 'standards' ? '#00E5FF' : 'transparent',
+                color: activeTab === 'standards' ? '#070A12' : '#9CA3AF',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <BookOpen size={14} />
+              <span>{t.navStandards}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('consulting')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: '7px',
+                fontSize: '12px',
+                fontWeight: 700,
+                backgroundColor: activeTab === 'consulting' ? '#00E5FF' : 'transparent',
+                color: activeTab === 'consulting' ? '#070A12' : '#9CA3AF',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <ShieldCheck size={14} />
+              <span>{t.navConsulting}</span>
+            </button>
+          </nav>
+
           {/* Social Links & Language Switcher */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {/* Language Selector Button */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -197,13 +298,12 @@ export function App() {
               <button
                 onClick={() => setLang('en')}
                 style={{
-                  padding: '5px 10px',
+                  padding: '4px 9px',
                   borderRadius: '6px',
                   fontSize: '11px',
                   fontWeight: 800,
                   backgroundColor: lang === 'en' ? '#00E5FF' : 'transparent',
-                  color: lang === 'en' ? '#070A12' : '#9CA3AF',
-                  transition: 'all 0.15s ease'
+                  color: lang === 'en' ? '#070A12' : '#9CA3AF'
                 }}
               >
                 EN
@@ -211,13 +311,12 @@ export function App() {
               <button
                 onClick={() => setLang('es')}
                 style={{
-                  padding: '5px 10px',
+                  padding: '4px 9px',
                   borderRadius: '6px',
                   fontSize: '11px',
                   fontWeight: 800,
                   backgroundColor: lang === 'es' ? '#00E5FF' : 'transparent',
-                  color: lang === 'es' ? '#070A12' : '#9CA3AF',
-                  transition: 'all 0.15s ease'
+                  color: lang === 'es' ? '#070A12' : '#9CA3AF'
                 }}
               >
                 ES
@@ -231,8 +330,8 @@ export function App() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '7px 14px',
+                gap: '6px',
+                padding: '7px 12px',
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontWeight: 700,
@@ -252,8 +351,8 @@ export function App() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '7px 14px',
+                gap: '6px',
+                padding: '7px 12px',
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontWeight: 700,
@@ -262,558 +361,648 @@ export function App() {
                 border: '1px solid rgba(255, 255, 255, 0.12)'
               }}
             >
-              <GitBranch size={14} color="#00E5FF" />
+              <GitBranch size={13} color="#00E5FF" />
               <span>GitHub</span>
             </a>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Main Hero Header */}
       <section style={{
-        maxWidth: '1280px',
+        maxWidth: '1360px',
         margin: '0 auto',
-        padding: '75px 24px 50px 24px',
+        padding: '60px 24px 40px 24px',
         position: 'relative'
       }}>
-        {/* Glow orb background */}
         <div style={{
-          position: 'absolute',
-          top: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '600px',
-          height: '280px',
-          background: 'radial-gradient(circle, rgba(0, 229, 255, 0.12) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          filter: 'blur(50px)',
-          zIndex: 0
-        }} />
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '5px 12px',
+          borderRadius: '999px',
+          backgroundColor: 'rgba(0, 229, 255, 0.08)',
+          border: '1px solid rgba(0, 229, 255, 0.3)',
+          color: '#00E5FF',
+          fontSize: '11px',
+          fontWeight: 800,
+          marginBottom: '20px',
+          letterSpacing: '0.6px'
+        }}>
+          <Sparkles size={13} />
+          <span>{t.heroBadge}</span>
+        </div>
 
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 14px',
-            borderRadius: '999px',
-            backgroundColor: 'rgba(0, 229, 255, 0.08)',
-            border: '1px solid rgba(0, 229, 255, 0.3)',
-            color: '#00E5FF',
-            fontSize: '12px',
-            fontWeight: 700,
-            marginBottom: '26px',
-            letterSpacing: '0.6px'
+        <h1 style={{
+          fontSize: 'clamp(32px, 4.5vw, 54px)',
+          fontWeight: 900,
+          lineHeight: 1.1,
+          letterSpacing: '-1.8px',
+          marginBottom: '18px',
+          maxWidth: '880px'
+        }}>
+          {t.heroTitle1}
+          <span style={{ 
+            background: 'linear-gradient(90deg, #00E5FF 0%, #38BDF8 60%, #818CF8 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
           }}>
-            <Sparkles size={14} />
-            <span>{t.tag}</span>
+            {t.heroHighlight}
+          </span>
+        </h1>
+
+        <p style={{
+          fontSize: '17px',
+          color: '#9CA3AF',
+          maxWidth: '720px',
+          lineHeight: 1.6,
+          marginBottom: '32px'
+        }}>
+          {t.heroSubtitle}
+        </p>
+
+        {/* Scalable Architecture KPI Strip */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '14px',
+          maxWidth: '960px'
+        }}>
+          <div style={{
+            backgroundColor: 'rgba(15, 23, 42, 0.6)',
+            border: '1px solid rgba(0, 229, 255, 0.2)',
+            padding: '16px 20px',
+            borderRadius: '10px'
+          }}>
+            <div style={{ fontSize: '11px', color: '#00E5FF', fontWeight: 800 }}>TRACK 01</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>Python + MCP</div>
+            <div style={{ fontSize: '12px', color: '#9CA3AF' }}>Distributed Micro-Agents</div>
           </div>
 
-          <h1 style={{
-            fontSize: 'clamp(36px, 5.2vw, 60px)',
-            fontWeight: 900,
-            lineHeight: 1.1,
-            letterSpacing: '-2px',
-            marginBottom: '22px',
-            maxWidth: '920px'
+          <div style={{
+            backgroundColor: 'rgba(15, 23, 42, 0.6)',
+            border: '1px solid rgba(245, 158, 11, 0.2)',
+            padding: '16px 20px',
+            borderRadius: '10px'
           }}>
-            {t.heroTitle1}
-            <span style={{ 
-              background: 'linear-gradient(90deg, #00E5FF 0%, #38BDF8 60%, #818CF8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              {t.heroHighlight}
-            </span>
-          </h1>
-
-          <p style={{
-            fontSize: '18px',
-            color: '#9CA3AF',
-            maxWidth: '740px',
-            lineHeight: 1.6,
-            marginBottom: '36px'
-          }}>
-            {t.heroSubtitle}
-          </p>
-
-          {/* Quick CTA Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            <a
-              href="#catalog"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '13px 26px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #00E5FF 0%, #0091FF 100%)',
-                color: '#070A12',
-                fontWeight: 800,
-                fontSize: '14px',
-                boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)'
-              }}
-            >
-              <span>{t.exploreBtn}</span>
-              <ChevronRight size={16} strokeWidth={3} />
-            </a>
-
-            <a
-              href="https://github.com/NexosAILab/multi-agent-mcp-starter"
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '13px 22px',
-                borderRadius: '8px',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#F3F4F6',
-                fontWeight: 700,
-                fontSize: '14px'
-              }}
-            >
-              <Code2 size={16} color="#00E5FF" />
-              <span>{t.cloneVid002}</span>
-              <ArrowUpRight size={15} color="#9CA3AF" />
-            </a>
+            <div style={{ fontSize: '11px', color: '#F59E0B', fontWeight: 800 }}>TRACK 02</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>Enterprise n8n</div>
+            <div style={{ fontSize: '12px', color: '#9CA3AF' }}>Self-healing automations</div>
           </div>
 
-          {/* NextGen 3D Interactive Feature Metric Cards */}
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '20px',
-            marginTop: '55px'
+            backgroundColor: 'rgba(15, 23, 42, 0.6)',
+            border: '1px solid rgba(16, 185, 129, 0.2)',
+            padding: '16px 20px',
+            borderRadius: '10px'
           }}>
-            <TiltCard3D maxTilt={7}>
-              <div style={{
-                backgroundColor: 'rgba(15, 23, 42, 0.7)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(0, 229, 255, 0.25)',
-                padding: '24px',
-                borderRadius: '14px',
-                height: '100%',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '11px', color: '#00E5FF', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    {t.card1Tag}
-                  </span>
-                  <Cpu size={18} color="#00E5FF" />
-                </div>
-                <div style={{ fontSize: '22px', fontWeight: 900, color: '#F3F4F6' }}>
-                  {t.card1Title}
-                </div>
-                <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '6px', lineHeight: 1.5 }}>
-                  {t.card1Desc}
-                </div>
-              </div>
-            </TiltCard3D>
+            <div style={{ fontSize: '11px', color: '#10B981', fontWeight: 800 }}>RELIABILITY</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>Zero UTC Drift</div>
+            <div style={{ fontSize: '12px', color: '#9CA3AF' }}>Native ZoneInfo conversion</div>
+          </div>
 
-            <TiltCard3D maxTilt={7}>
-              <div style={{
-                backgroundColor: 'rgba(15, 23, 42, 0.7)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(16, 185, 129, 0.25)',
-                padding: '24px',
-                borderRadius: '14px',
-                height: '100%',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    {t.card2Tag}
-                  </span>
-                  <ShieldCheck size={18} color="#10B981" />
-                </div>
-                <div style={{ fontSize: '22px', fontWeight: 900, color: '#F3F4F6' }}>
-                  {t.card2Title}
-                </div>
-                <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '6px', lineHeight: 1.5 }}>
-                  {t.card2Desc}
-                </div>
-              </div>
-            </TiltCard3D>
-
-            <TiltCard3D maxTilt={7}>
-              <div style={{
-                backgroundColor: 'rgba(15, 23, 42, 0.7)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(245, 158, 11, 0.25)',
-                padding: '24px',
-                borderRadius: '14px',
-                height: '100%',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '11px', color: '#F59E0B', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    {t.card3Tag}
-                  </span>
-                  <TerminalIcon size={18} color="#F59E0B" />
-                </div>
-                <div style={{ fontSize: '22px', fontWeight: 900, color: '#F3F4F6' }}>
-                  {t.card3Title}
-                </div>
-                <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '6px', lineHeight: 1.5 }}>
-                  {t.card3Desc}
-                </div>
-              </div>
-            </TiltCard3D>
+          <div style={{
+            backgroundColor: 'rgba(15, 23, 42, 0.6)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            padding: '16px 20px',
+            borderRadius: '10px'
+          }}>
+            <div style={{ fontSize: '11px', color: '#D1D5DB', fontWeight: 800 }}>OPEN SOURCE</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>MIT Repositories</div>
+            <div style={{ fontSize: '12px', color: '#9CA3AF' }}>Docker & pytest ready</div>
           </div>
         </div>
       </section>
 
-      {/* Catalog & Filter Section */}
-      <section id="catalog" style={{
-        maxWidth: '1280px',
-        margin: '0 auto',
-        padding: '30px 24px 70px 24px'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'flex-end',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '20px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          paddingBottom: '20px',
-          marginBottom: '32px'
-        }}>
+      {/* Main Content Pane Router */}
+      <main style={{ maxWidth: '1360px', margin: '0 auto', padding: '10px 24px 80px 24px' }}>
+        
+        {/* TAB 1: EPISODES CATALOG */}
+        {activeTab === 'episodes' && (
           <div>
-            <div style={{ fontSize: '11px', color: '#00E5FF', fontWeight: 800, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
-              {t.catTag}
-            </div>
-            <h2 style={{ fontSize: '28px', fontWeight: 900, letterSpacing: '-0.5px' }}>
-              {t.catTitle}
-            </h2>
-            <p style={{ fontSize: '14px', color: '#9CA3AF', marginTop: '4px' }}>
-              {t.catDesc}
-            </p>
-          </div>
+            {/* Search Bar + Track Filter Header */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '16px',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              paddingBottom: '20px',
+              marginBottom: '32px'
+            }}>
+              {/* Live Search Input */}
+              <div style={{
+                position: 'relative',
+                flex: '1 1 340px',
+                maxWidth: '460px'
+              }}>
+                <Search size={16} color="#6B7280" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t.searchPlaceholder}
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px 10px 40px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#FFF',
+                    fontSize: '13px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
 
-          <div style={{ display: 'flex', gap: '8px', backgroundColor: 'rgba(255, 255, 255, 0.03)', padding: '4px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <button
-              onClick={() => setFilter('all')}
-              style={{
-                padding: '7px 14px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                fontWeight: 700,
-                backgroundColor: filter === 'all' ? '#00E5FF' : 'transparent',
-                color: filter === 'all' ? '#070A12' : '#9CA3AF',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              {t.filterAll} ({episodes.length})
-            </button>
-            <button
-              onClick={() => setFilter('multi-agent')}
-              style={{
-                padding: '7px 14px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                fontWeight: 700,
-                backgroundColor: filter === 'multi-agent' ? '#00E5FF' : 'transparent',
-                color: filter === 'multi-agent' ? '#070A12' : '#9CA3AF',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              {t.filterAgent}
-            </button>
-            <button
-              onClick={() => setFilter('n8n')}
-              style={{
-                padding: '7px 14px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                fontWeight: 700,
-                backgroundColor: filter === 'n8n' ? '#00E5FF' : 'transparent',
-                color: filter === 'n8n' ? '#070A12' : '#9CA3AF',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              {t.filterN8n}
-            </button>
-          </div>
-        </div>
-
-        {/* Episode Grid with 3D Interactive Tilt Cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))',
-          gap: '28px'
-        }}>
-          {filteredEpisodes.map(ep => (
-            <TiltCard3D key={ep.id} maxTilt={5}>
-              <div 
-                style={{
-                  backgroundColor: 'rgba(15, 23, 42, 0.75)',
-                  backdropFilter: 'blur(20px)',
-                  border: ep.featured ? '1px solid rgba(0, 229, 255, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
-                  boxShadow: ep.featured ? '0 15px 40px rgba(0, 229, 255, 0.15)' : '0 10px 30px rgba(0, 0, 0, 0.5)'
-                }}
-              >
-                {/* Thumbnail Header with Live Badge */}
-                <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', backgroundColor: '#000' }}>
-                  <img 
-                    src={ep.thumbnail_url} 
-                    alt={ep.title}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover'
-                    }}
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    backgroundColor: 'rgba(7, 10, 18, 0.85)',
-                    padding: '4px 10px',
+              {/* Track Filters */}
+              <div style={{ display: 'flex', gap: '8px', backgroundColor: 'rgba(255, 255, 255, 0.03)', padding: '4px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <button
+                  onClick={() => setFilter('all')}
+                  style={{
+                    padding: '6px 14px',
                     borderRadius: '6px',
                     fontSize: '12px',
                     fontWeight: 700,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                  }}>
-                    <Clock size={12} color="#00E5FF" />
-                    <span>{ep.duration}</span>
-                  </div>
-
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '12px',
-                    left: '12px',
-                    backgroundColor: ep.track_slug === 'multi-agent' ? '#00E5FF' : '#F59E0B',
-                    color: '#070A12',
-                    padding: '4px 10px',
+                    backgroundColor: filter === 'all' ? '#00E5FF' : 'transparent',
+                    color: filter === 'all' ? '#070A12' : '#9CA3AF'
+                  }}
+                >
+                  {t.filterAll} ({episodes.length})
+                </button>
+                <button
+                  onClick={() => setFilter('multi-agent')}
+                  style={{
+                    padding: '6px 14px',
                     borderRadius: '6px',
-                    fontSize: '11px',
-                    fontWeight: 800,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
-                  }}>
-                    {ep.track}
-                  </div>
-                </div>
-
-                {/* Body Content */}
-                <div style={{ padding: '26px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontSize: '11px', color: '#6B7280', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '8px' }}>
-                    {t.released} {ep.release_date}
-                  </div>
-                  <h3 style={{ fontSize: '19px', fontWeight: 800, lineHeight: 1.35, marginBottom: '12px' }}>
-                    {ep.title}
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#9CA3AF', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
-                    {ep.description}
-                  </p>
-
-                  {/* Tech Stack Pills */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '22px' }}>
-                    {ep.stack.map(st => (
-                      <span 
-                        key={st}
-                        style={{
-                          backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                          border: '1px solid rgba(255, 255, 255, 0.08)',
-                          padding: '3px 8px',
-                          borderRadius: '4px',
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          color: '#D1D5DB'
-                        }}
-                      >
-                        {st}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Benchmarks & Performance Metrics */}
-                  <div style={{
-                    backgroundColor: 'rgba(7, 10, 18, 0.6)',
-                    border: '1px solid rgba(255, 255, 255, 0.06)',
-                    borderRadius: '10px',
-                    padding: '12px',
-                    marginBottom: '22px',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap: '10px',
-                    fontSize: '12px'
-                  }}>
-                    {Object.entries(ep.metrics).filter(([_, v]) => Boolean(v)).map(([k, v]) => (
-                      <div key={k}>
-                        <div style={{ color: '#6B7280', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          {k.replace('_', ' ')}
-                        </div>
-                        <div style={{ fontWeight: 800, color: '#00E5FF', fontSize: '13px', marginTop: '2px' }}>
-                          {v}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* High Contrast Action Links */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                    <a
-                      href={ep.youtube_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        padding: '11px',
-                        borderRadius: '8px',
-                        backgroundColor: '#EF4444',
-                        color: '#FFF',
-                        fontSize: '13px',
-                        fontWeight: 700
-                      }}
-                    >
-                      <Play size={14} fill="#FFF" />
-                      <span>{t.watchVideo}</span>
-                    </a>
-                    <a
-                      href={ep.github_repo}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        padding: '11px',
-                        borderRadius: '8px',
-                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                        border: '1px solid rgba(255, 255, 255, 0.16)',
-                        color: '#FFF',
-                        fontSize: '13px',
-                        fontWeight: 700
-                      }}
-                    >
-                      <Code2 size={15} color="#00E5FF" />
-                      <span>{t.cloneStarter}</span>
-                    </a>
-                  </div>
-                </div>
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    backgroundColor: filter === 'multi-agent' ? '#00E5FF' : 'transparent',
+                    color: filter === 'multi-agent' ? '#070A12' : '#9CA3AF'
+                  }}
+                >
+                  {t.filterAgent}
+                </button>
+                <button
+                  onClick={() => setFilter('n8n')}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    backgroundColor: filter === 'n8n' ? '#00E5FF' : 'transparent',
+                    color: filter === 'n8n' ? '#070A12' : '#9CA3AF'
+                  }}
+                >
+                  {t.filterN8n}
+                </button>
               </div>
-            </TiltCard3D>
-          ))}
-        </div>
-      </section>
+            </div>
 
-      {/* Enterprise B2B Architecture Banner */}
-      <section style={{
-        maxWidth: '1280px',
-        margin: '0 auto',
-        padding: '0 24px 90px 24px'
-      }}>
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 15, 25, 0.95) 100%)',
-          border: '1px solid rgba(0, 229, 255, 0.25)',
-          borderRadius: '20px',
-          padding: '52px 38px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '44px',
-          alignItems: 'center',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
-        }}>
-          <div>
+            {/* Episode Grid with 3D Interactive Tilt Cards */}
             <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              color: '#00E5FF',
-              fontSize: '11px',
-              fontWeight: 800,
-              letterSpacing: '1px',
-              textTransform: 'uppercase',
-              marginBottom: '16px'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))',
+              gap: '26px'
             }}>
-              <ShieldCheck size={16} />
-              <span>{t.b2bTag}</span>
+              {filteredEpisodes.map(ep => (
+                <TiltCard3D key={ep.id} maxTilt={5}>
+                  <div 
+                    style={{
+                      backgroundColor: 'rgba(15, 23, 42, 0.75)',
+                      backdropFilter: 'blur(20px)',
+                      border: ep.featured ? '1px solid rgba(0, 229, 255, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: '100%',
+                      boxShadow: ep.featured ? '0 15px 40px rgba(0, 229, 255, 0.15)' : '0 10px 30px rgba(0, 0, 0, 0.5)'
+                    }}
+                  >
+                    {/* Thumbnail Header */}
+                    <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', backgroundColor: '#000' }}>
+                      <img 
+                        src={ep.thumbnail_url} 
+                        alt={ep.title}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover'
+                        }}
+                      />
+                      <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        backgroundColor: 'rgba(7, 10, 18, 0.85)',
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        border: '1px solid rgba(255, 255, 255, 0.1)'
+                      }}>
+                        <Clock size={12} color="#00E5FF" />
+                        <span>{ep.duration}</span>
+                      </div>
+
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '12px',
+                        left: '12px',
+                        backgroundColor: ep.track_slug === 'multi-agent' ? '#00E5FF' : '#F59E0B',
+                        color: '#070A12',
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>
+                        {ep.track}
+                      </div>
+                    </div>
+
+                    {/* Body Content */}
+                    <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ fontSize: '11px', color: '#6B7280', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '8px' }}>
+                        {t.released} {ep.release_date}
+                      </div>
+                      <h3 style={{ fontSize: '18px', fontWeight: 800, lineHeight: 1.35, marginBottom: '12px' }}>
+                        {ep.title}
+                      </h3>
+                      <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                        {ep.description}
+                      </p>
+
+                      {/* Tech Stack Pills */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
+                        {ep.stack.map(st => (
+                          <span 
+                            key={st}
+                            style={{
+                              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                              padding: '3px 8px',
+                              borderRadius: '4px',
+                              fontSize: '11px',
+                              fontWeight: 600,
+                              color: '#D1D5DB'
+                            }}
+                          >
+                            {st}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Performance Metrics */}
+                      <div style={{
+                        backgroundColor: 'rgba(7, 10, 18, 0.6)',
+                        border: '1px solid rgba(255, 255, 255, 0.06)',
+                        borderRadius: '10px',
+                        padding: '12px',
+                        marginBottom: '20px',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gap: '10px',
+                        fontSize: '12px'
+                      }}>
+                        {Object.entries(ep.metrics).filter(([_, v]) => Boolean(v)).map(([k, v]) => (
+                          <div key={k}>
+                            <div style={{ color: '#6B7280', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                              {k.replace('_', ' ')}
+                            </div>
+                            <div style={{ fontWeight: 800, color: '#00E5FF', fontSize: '13px', marginTop: '2px' }}>
+                              {v}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Action Links */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        <a
+                          href={ep.youtube_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            padding: '10px',
+                            borderRadius: '8px',
+                            backgroundColor: '#EF4444',
+                            color: '#FFF',
+                            fontSize: '13px',
+                            fontWeight: 700
+                          }}
+                        >
+                          <Play size={13} fill="#FFF" />
+                          <span>{t.cardWatch}</span>
+                        </a>
+                        <a
+                          href={ep.github_repo}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            padding: '10px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                            border: '1px solid rgba(255, 255, 255, 0.16)',
+                            color: '#FFF',
+                            fontSize: '13px',
+                            fontWeight: 700
+                          }}
+                        >
+                          <Code2 size={14} color="#00E5FF" />
+                          <span>{t.cardClone}</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </TiltCard3D>
+              ))}
             </div>
-            <h2 style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1.15, marginBottom: '16px' }}>
-              {t.b2bTitle}
-            </h2>
-            <p style={{ color: '#9CA3AF', fontSize: '15px', lineHeight: 1.6, marginBottom: '26px' }}>
-              {t.b2bDesc}
-            </p>
-
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
-                <CheckCircle2 size={18} color="#00E5FF" />
-                <span>{t.b2bBenefit1}</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
-                <CheckCircle2 size={18} color="#00E5FF" />
-                <span>{t.b2bBenefit2}</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
-                <CheckCircle2 size={18} color="#00E5FF" />
-                <span>{t.b2bBenefit3}</span>
-              </li>
-            </ul>
           </div>
+        )}
 
+        {/* TAB 2: STARTERS REPO DIRECTORY */}
+        {activeTab === 'starters' && (
+          <div>
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '28px', fontWeight: 900 }}>{t.startersTitle}</h2>
+              <p style={{ color: '#9CA3AF', marginTop: '6px' }}>{t.startersSubtitle}</p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+              <TiltCard3D maxTilt={5}>
+                <div style={{
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(0, 229, 255, 0.3)',
+                  borderRadius: '14px',
+                  padding: '28px',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#00E5FF', textTransform: 'uppercase' }}>
+                      Python 3.12 • MCP Core
+                    </span>
+                    <GitBranch size={16} color="#00E5FF" />
+                  </div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>
+                    NexosAILab/multi-agent-mcp-starter
+                  </h3>
+                  <p style={{ color: '#9CA3AF', fontSize: '14px', lineHeight: 1.6, flex: 1, marginBottom: '20px' }}>
+                    Production-ready template for distributed micro-agents in Python using Model Context Protocol (MCP), FastAPI, asyncio concurrency, and zoneinfo calendar synchronization.
+                  </p>
+                  <a
+                    href="https://github.com/NexosAILab/multi-agent-mcp-starter"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      background: 'linear-gradient(135deg, #00E5FF 0%, #0091FF 100%)',
+                      color: '#070A12',
+                      fontWeight: 800,
+                      fontSize: '13px'
+                    }}
+                  >
+                    <span>Inspect Repository on GitHub</span>
+                    <ExternalLink size={14} />
+                  </a>
+                </div>
+              </TiltCard3D>
+
+              <TiltCard3D maxTilt={5}>
+                <div style={{
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  borderRadius: '14px',
+                  padding: '28px',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#F59E0B', textTransform: 'uppercase' }}>
+                      n8n • Webhooks • Low-Code
+                    </span>
+                    <Boxes size={16} color="#F59E0B" />
+                  </div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>
+                    NexosAILab/autonomous-agent-starter
+                  </h3>
+                  <p style={{ color: '#9CA3AF', fontSize: '14px', lineHeight: 1.6, flex: 1, marginBottom: '20px' }}>
+                    Self-healing autonomous agent starter workflow for n8n. Includes production webhook ingestion, payload normalization, error interceptors, and state persistence.
+                  </p>
+                  <a
+                    href="https://github.com/NexosAILab/autonomous-agent-starter"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.16)',
+                      color: '#FFF',
+                      fontWeight: 800,
+                      fontSize: '13px'
+                    }}
+                  >
+                    <span>Inspect Repository on GitHub</span>
+                    <ExternalLink size={14} />
+                  </a>
+                </div>
+              </TiltCard3D>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: ENGINEERING STANDARDS */}
+        {activeTab === 'standards' && (
+          <div style={{ maxWidth: '960px' }}>
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '28px', fontWeight: 900 }}>{t.standardsTitle}</h2>
+              <p style={{ color: '#9CA3AF', marginTop: '6px' }}>{t.standardsSubtitle}</p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '12px',
+                padding: '24px'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#00E5FF', marginBottom: '8px' }}>
+                  {t.rule1Title}
+                </h3>
+                <p style={{ color: '#D1D5DB', fontSize: '14px', lineHeight: 1.6 }}>
+                  {t.rule1Desc}
+                </p>
+              </div>
+
+              <div style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '12px',
+                padding: '24px'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#10B981', marginBottom: '8px' }}>
+                  {t.rule2Title}
+                </h3>
+                <p style={{ color: '#D1D5DB', fontSize: '14px', lineHeight: 1.6 }}>
+                  {t.rule2Desc}
+                </p>
+              </div>
+
+              <div style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '12px',
+                padding: '24px'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#F59E0B', marginBottom: '8px' }}>
+                  {t.rule3Title}
+                </h3>
+                <p style={{ color: '#D1D5DB', fontSize: '14px', lineHeight: 1.6 }}>
+                  {t.rule3Desc}
+                </p>
+              </div>
+
+              <div style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '12px',
+                padding: '24px'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#818CF8', marginBottom: '8px' }}>
+                  {t.rule4Title}
+                </h3>
+                <p style={{ color: '#D1D5DB', fontSize: '14px', lineHeight: 1.6 }}>
+                  {t.rule4Desc}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: B2B CONSULTING */}
+        {activeTab === 'consulting' && (
           <div style={{
-            backgroundColor: 'rgba(7, 10, 18, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '16px',
-            padding: '30px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
+            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 15, 25, 0.95) 100%)',
+            border: '1px solid rgba(0, 229, 255, 0.25)',
+            borderRadius: '20px',
+            padding: '50px 36px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '40px',
+            alignItems: 'center'
           }}>
-            <h3 style={{ fontSize: '19px', fontWeight: 800 }}>{t.b2bBoxTitle}</h3>
-            <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: 1.5 }}>
-              {t.b2bBoxDesc}
-            </p>
-
-            <a
-              href="mailto:nexosailab@gmail.com?subject=Enterprise%20Multi-Agent%20Architecture%20Inquiry"
-              style={{
-                display: 'flex',
+            <div>
+              <div style={{
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                padding: '14px',
-                borderRadius: '8px',
-                background: 'linear-gradient(90deg, #00E5FF 0%, #0091FF 100%)',
-                color: '#070A12',
+                gap: '6px',
+                color: '#00E5FF',
+                fontSize: '11px',
                 fontWeight: 800,
-                fontSize: '14px',
-                boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)',
-                marginTop: '8px'
-              }}
-            >
-              <Mail size={17} />
-              <span>{t.b2bBoxBtn}</span>
-            </a>
+                letterSpacing: '1px',
+                textTransform: 'uppercase',
+                marginBottom: '16px'
+              }}>
+                <ShieldCheck size={16} />
+                <span>B2B SYSTEMS ARCHITECTURE</span>
+              </div>
+              <h2 style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1.15, marginBottom: '16px' }}>
+                {t.consultingTitle}
+              </h2>
+              <p style={{ color: '#9CA3AF', fontSize: '15px', lineHeight: 1.6, marginBottom: '26px' }}>
+                {t.consultingSubtitle}
+              </p>
 
-            <div style={{ textAlign: 'center', fontSize: '12px', color: '#6B7280' }}>
-              {t.directEmail} <strong style={{ color: '#D1D5DB' }}>nexosailab@gmail.com</strong>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
+                  <CheckCircle2 size={18} color="#00E5FF" />
+                  <span>{t.b2bFeature1}</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
+                  <CheckCircle2 size={18} color="#00E5FF" />
+                  <span>{t.b2bFeature2}</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
+                  <CheckCircle2 size={18} color="#00E5FF" />
+                  <span>{t.b2bFeature3}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div style={{
+              backgroundColor: 'rgba(7, 10, 18, 0.8)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '16px',
+              padding: '30px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
+            }}>
+              <h3 style={{ fontSize: '19px', fontWeight: 800 }}>{t.scheduleBtn}</h3>
+              <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: 1.5 }}>
+                Directly consult with our engineering lab for design reviews, proof of concepts, and scalable agent deployment:
+              </p>
+
+              <a
+                href="mailto:nexosailab@gmail.com?subject=Enterprise%20Multi-Agent%20Architecture%20Inquiry"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '14px',
+                  borderRadius: '8px',
+                  background: 'linear-gradient(90deg, #00E5FF 0%, #0091FF 100%)',
+                  color: '#070A12',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)',
+                  marginTop: '8px'
+                }}
+              >
+                <Mail size={17} />
+                <span>Contact Architecture Lab</span>
+              </a>
+
+              <div style={{ textAlign: 'center', fontSize: '12px', color: '#6B7280' }}>
+                Direct email: <strong style={{ color: '#D1D5DB' }}>nexosailab@gmail.com</strong>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        )}
+
+      </main>
 
       {/* Footer */}
       <footer style={{
@@ -823,10 +1012,10 @@ export function App() {
         fontSize: '13px',
         color: '#6B7280'
       }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+        <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img src="/logo.png" alt="Nexos" style={{ width: '22px', height: '22px', borderRadius: '4px' }} />
-            <span>© 2026 <strong>Nexos AI Lab</strong>. {t.footerNotice}</span>
+            <span>© 2026 <strong>Nexos AI Lab</strong>. {t.footerDesc}</span>
           </div>
           <div style={{ display: 'flex', gap: '24px' }}>
             <a href="https://github.com/NexosAILab" target="_blank" rel="noreferrer" style={{ color: '#9CA3AF', fontWeight: 600 }}>GitHub Org</a>
