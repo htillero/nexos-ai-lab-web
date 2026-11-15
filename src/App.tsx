@@ -34,12 +34,91 @@ interface Episode {
 }
 
 export function App() {
+  const [lang, setLang] = useState<'en' | 'es'>('en');
   const [filter, setFilter] = useState<'all' | 'multi-agent' | 'n8n'>('all');
   const episodes = episodesData as unknown as Episode[];
 
   const filteredEpisodes = filter === 'all' 
     ? episodes 
     : episodes.filter(ep => ep.track_slug === filter);
+
+  // i18n Dictionary
+  const t = {
+    en: {
+      tag: "TIER-1 OPEN SOURCE & INDUSTRIAL AGENT ENGINEERING",
+      heroTitle1: "Production Multi-Agent Systems & ",
+      heroHighlight: "Deterministic Workflows.",
+      heroSubtitle: "We build and benchmark resilient agent swarms for enterprise environments. Cutting through framework bloat to deliver sub-second tool routing, zero UTC drift, and reproducible open-source starters.",
+      exploreBtn: "Explore Code Starters",
+      cloneVid002: "Clone VID_002 Starter",
+      card1Tag: "PROTOCOL STANDARD",
+      card1Title: "Model Context Protocol",
+      card1Desc: "Anthropic STDIO & SSE tools for isolated micro-agents without runtime memory leaks.",
+      card2Tag: "DETERMINISTIC TIME",
+      card2Title: "Zero UTC Drift",
+      card2Desc: "Strict IANA timezone normalization with native Python 3.12 zoneinfo.",
+      card3Tag: "PRODUCTION CODE",
+      card3Title: "100% Tested Starters",
+      card3Desc: "Full pytest verification suites, Dockerized environments, and literate documentation.",
+      catTag: "RELEASES & ARCHITECTURE BENCHMARKS",
+      catTitle: "Production Episode Catalog",
+      catDesc: "Direct access to full videos, reproducible GitHub starters, and performance telemetry.",
+      filterAll: "All Releases",
+      filterAgent: "Multi-Agent (Python)",
+      filterN8n: "Enterprise n8n",
+      released: "RELEASED",
+      watchVideo: "Watch Deep Dive",
+      cloneStarter: "Clone Starter",
+      b2bTag: "B2B SYSTEMS ENGINEERING & ARCHITECTURE",
+      b2bTitle: "Scale Custom Multi-Agent Systems in Your Enterprise",
+      b2bDesc: "We partner directly with technical teams and founders to design and implement deterministic micro-agent swarms, Model Context Protocol servers, and enterprise automation infrastructure.",
+      b2bBenefit1: "Custom Model Context Protocol (MCP) server development",
+      b2bBenefit2: "Deterministic agent orchestration with zero context runaway",
+      b2bBenefit3: "Self-healing enterprise n8n clusters and webhook processing",
+      b2bBoxTitle: "Schedule Technical Consultation",
+      b2bBoxDesc: "Contact our engineering team directly for architectural reviews, proof of concepts, or enterprise consulting:",
+      b2bBoxBtn: "Contact Architecture Lab",
+      directEmail: "Direct email:",
+      footerNotice: "Production-grade AI engineering. Open-source under MIT License."
+    },
+    es: {
+      tag: "INGENIERÍA DE AGENTES INDUSTRIALES Y CÓDIGO ABIERTO TIER-1",
+      heroTitle1: "Sistemas Multi-Agente en Producción y ",
+      heroHighlight: "Flujos Deterministas.",
+      heroSubtitle: "Diseñamos y medimos enjambres de agentes resilientes para entornos empresariales. Eliminamos el exceso de frameworks para lograr enrutamiento sub-segundo, cero desfase de zonas horarias y starters reproducibles.",
+      exploreBtn: "Explorar Código Starter",
+      cloneVid002: "Clonar Starter VID_002",
+      card1Tag: "ESTÁNDAR DE PROTOCOLO",
+      card1Title: "Model Context Protocol",
+      card1Desc: "Herramientas Anthropic por STDIO y SSE para microagentes aislados sin fugas de memoria en runtime.",
+      card2Tag: "TIEMPO DETERMINISTA",
+      card2Title: "Cero Desfase UTC",
+      card2Desc: "Normalización estricta de zonas horarias IANA con la librería nativa zoneinfo de Python 3.12.",
+      card3Tag: "CÓDIGO DE PRODUCCIÓN",
+      card3Title: "Starters 100% Probados",
+      card3Desc: "Suites de prueba completas en pytest, entornos Dockerizados y documentación forense.",
+      catTag: "LANZAMIENTOS Y BENCHMARKS DE ARQUITECTURA",
+      catTitle: "Catálogo de Episodios en Producción",
+      catDesc: "Acceso directo a videos maestros, repositorios starter en GitHub y telemetría de rendimiento.",
+      filterAll: "Todos los Lanzamientos",
+      filterAgent: "Multi-Agente (Python)",
+      filterN8n: "Automatización n8n",
+      released: "PUBLICADO",
+      watchVideo: "Ver Video Maestro",
+      cloneStarter: "Clonar Starter",
+      b2bTag: "INGENIERÍA Y ARQUITECTURA DE SISTEMAS B2B",
+      b2bTitle: "Escala Sistemas Multi-Agente a Medida en tu Empresa",
+      b2bDesc: "Trabajamos directamente con equipos técnicos y fundadores para diseñar e implementar enjambres de microagentes deterministas, servidores MCP y arquitectura de automatización empresarial.",
+      b2bBenefit1: "Desarrollo de servidores privados Model Context Protocol (MCP)",
+      b2bBenefit2: "Orquestación determinista de agentes con cero saturación de contexto",
+      b2bBenefit3: "Despliegue de clústeres resilientes de n8n y procesamiento de webhooks",
+      b2bBoxTitle: "Agendar Consulta Técnica",
+      b2bBoxDesc: "Contacta directamente a nuestro laboratorio de ingeniería para revisiones arquitectónicas o consultoría empresarial:",
+      b2bBoxBtn: "Contactar al Equipo de Arquitectura",
+      directEmail: "Correo directo:",
+      footerNotice: "Ingeniería de Inteligencia Artificial para Producción. Licencia MIT."
+    }
+  }[lang];
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
@@ -57,7 +136,7 @@ export function App() {
         <div style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '14px 24px',
+          padding: '12px 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -66,8 +145,8 @@ export function App() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{
               position: 'relative',
-              width: '42px',
-              height: '42px',
+              width: '40px',
+              height: '40px',
               borderRadius: '10px',
               overflow: 'hidden',
               boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)',
@@ -82,7 +161,7 @@ export function App() {
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontWeight: 900, fontSize: '19px', letterSpacing: '-0.5px' }}>
+                <span style={{ fontWeight: 900, fontSize: '18px', letterSpacing: '-0.5px' }}>
                   NEXOS <span style={{ color: '#00E5FF' }}>AI LAB</span>
                 </span>
                 <span style={{
@@ -104,8 +183,47 @@ export function App() {
             </div>
           </div>
 
-          {/* Social / Channel Quick Access */}
+          {/* Social Links & Language Switcher */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* Language Selector Button */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: '8px',
+              padding: '2px',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              <button
+                onClick={() => setLang('en')}
+                style={{
+                  padding: '5px 10px',
+                  borderRadius: '6px',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  backgroundColor: lang === 'en' ? '#00E5FF' : 'transparent',
+                  color: lang === 'en' ? '#070A12' : '#9CA3AF',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLang('es')}
+                style={{
+                  padding: '5px 10px',
+                  borderRadius: '6px',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  backgroundColor: lang === 'es' ? '#00E5FF' : 'transparent',
+                  color: lang === 'es' ? '#070A12' : '#9CA3AF',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                ES
+              </button>
+            </div>
+
             <a 
               href="https://www.youtube.com/@NexosAILab" 
               target="_blank" 
@@ -114,19 +232,19 @@ export function App() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '8px 16px',
+                padding: '7px 14px',
                 borderRadius: '8px',
-                fontSize: '13px',
+                fontSize: '12px',
                 fontWeight: 700,
                 backgroundColor: 'rgba(239, 68, 68, 0.1)',
                 color: '#EF4444',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                transition: 'all 0.2s ease'
+                border: '1px solid rgba(239, 68, 68, 0.3)'
               }}
             >
-              <Play size={14} fill="#EF4444" />
-              <span>YouTube Channel</span>
+              <Play size={13} fill="#EF4444" />
+              <span>YouTube</span>
             </a>
+
             <a 
               href="https://github.com/NexosAILab" 
               target="_blank" 
@@ -135,17 +253,17 @@ export function App() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '8px 16px',
+                padding: '7px 14px',
                 borderRadius: '8px',
-                fontSize: '13px',
+                fontSize: '12px',
                 fontWeight: 700,
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 color: '#F3F4F6',
                 border: '1px solid rgba(255, 255, 255, 0.12)'
               }}
             >
-              <GitBranch size={15} color="#00E5FF" />
-              <span>GitHub Org</span>
+              <GitBranch size={14} color="#00E5FF" />
+              <span>GitHub</span>
             </a>
           </div>
         </div>
@@ -155,7 +273,7 @@ export function App() {
       <section style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: '80px 24px 60px 24px',
+        padding: '75px 24px 50px 24px',
         position: 'relative'
       }}>
         {/* Glow orb background */}
@@ -184,39 +302,39 @@ export function App() {
             color: '#00E5FF',
             fontSize: '12px',
             fontWeight: 700,
-            marginBottom: '28px',
+            marginBottom: '26px',
             letterSpacing: '0.6px'
           }}>
             <Sparkles size={14} />
-            <span>TIER-1 OPEN SOURCE & INDUSTRIAL AGENT ENGINEERING</span>
+            <span>{t.tag}</span>
           </div>
 
           <h1 style={{
-            fontSize: 'clamp(38px, 5.5vw, 62px)',
+            fontSize: 'clamp(36px, 5.2vw, 60px)',
             fontWeight: 900,
-            lineHeight: 1.08,
+            lineHeight: 1.1,
             letterSpacing: '-2px',
-            marginBottom: '24px',
+            marginBottom: '22px',
             maxWidth: '920px'
           }}>
-            Production Multi-Agent Systems &{' '}
+            {t.heroTitle1}
             <span style={{ 
               background: 'linear-gradient(90deg, #00E5FF 0%, #38BDF8 60%, #818CF8 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}>
-              Deterministic Workflows.
+              {t.heroHighlight}
             </span>
           </h1>
 
           <p style={{
-            fontSize: '19px',
+            fontSize: '18px',
             color: '#9CA3AF',
             maxWidth: '740px',
             lineHeight: 1.6,
-            marginBottom: '40px'
+            marginBottom: '36px'
           }}>
-            We build and benchmark resilient agent swarms for enterprise environments. Cutting through framework bloat to deliver sub-second tool routing, zero UTC drift, and reproducible open-source starters.
+            {t.heroSubtitle}
           </p>
 
           {/* Quick CTA Actions */}
@@ -227,7 +345,7 @@ export function App() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '14px 28px',
+                padding: '13px 26px',
                 borderRadius: '8px',
                 background: 'linear-gradient(135deg, #00E5FF 0%, #0091FF 100%)',
                 color: '#070A12',
@@ -236,7 +354,7 @@ export function App() {
                 boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)'
               }}
             >
-              <span>Explore Code Starters</span>
+              <span>{t.exploreBtn}</span>
               <ChevronRight size={16} strokeWidth={3} />
             </a>
 
@@ -248,7 +366,7 @@ export function App() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '14px 24px',
+                padding: '13px 22px',
                 borderRadius: '8px',
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
@@ -258,7 +376,7 @@ export function App() {
               }}
             >
               <Code2 size={16} color="#00E5FF" />
-              <span>Clone VID_002 Starter</span>
+              <span>{t.cloneVid002}</span>
               <ArrowUpRight size={15} color="#9CA3AF" />
             </a>
           </div>
@@ -268,7 +386,7 @@ export function App() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
             gap: '20px',
-            marginTop: '60px'
+            marginTop: '55px'
           }}>
             <TiltCard3D maxTilt={7}>
               <div style={{
@@ -282,15 +400,15 @@ export function App() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                   <span style={{ fontSize: '11px', color: '#00E5FF', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    PROTOCOL STANDARD
+                    {t.card1Tag}
                   </span>
                   <Cpu size={18} color="#00E5FF" />
                 </div>
-                <div style={{ fontSize: '24px', fontWeight: 900, color: '#F3F4F6' }}>
-                  Model Context Protocol
+                <div style={{ fontSize: '22px', fontWeight: 900, color: '#F3F4F6' }}>
+                  {t.card1Title}
                 </div>
                 <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '6px', lineHeight: 1.5 }}>
-                  Anthropic STDIO & SSE tools for isolated micro-agents without runtime memory leaks.
+                  {t.card1Desc}
                 </div>
               </div>
             </TiltCard3D>
@@ -307,15 +425,15 @@ export function App() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                   <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    DETERMINISTIC TIME
+                    {t.card2Tag}
                   </span>
                   <ShieldCheck size={18} color="#10B981" />
                 </div>
-                <div style={{ fontSize: '24px', fontWeight: 900, color: '#F3F4F6' }}>
-                  Zero UTC Drift
+                <div style={{ fontSize: '22px', fontWeight: 900, color: '#F3F4F6' }}>
+                  {t.card2Title}
                 </div>
                 <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '6px', lineHeight: 1.5 }}>
-                  Strict IANA timezone normalization with native Python 3.12 <code>zoneinfo</code>.
+                  {t.card2Desc}
                 </div>
               </div>
             </TiltCard3D>
@@ -332,15 +450,15 @@ export function App() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                   <span style={{ fontSize: '11px', color: '#F59E0B', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    PRODUCTION CODE
+                    {t.card3Tag}
                   </span>
                   <TerminalIcon size={18} color="#F59E0B" />
                 </div>
-                <div style={{ fontSize: '24px', fontWeight: 900, color: '#F3F4F6' }}>
-                  100% Tested Starters
+                <div style={{ fontSize: '22px', fontWeight: 900, color: '#F3F4F6' }}>
+                  {t.card3Title}
                 </div>
                 <div style={{ fontSize: '13px', color: '#9CA3AF', marginTop: '6px', lineHeight: 1.5 }}>
-                  Full pytest verification suites, Dockerized environments, and literate documentation.
+                  {t.card3Desc}
                 </div>
               </div>
             </TiltCard3D>
@@ -352,7 +470,7 @@ export function App() {
       <section id="catalog" style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: '40px 24px 80px 24px'
+        padding: '30px 24px 70px 24px'
       }}>
         <div style={{
           display: 'flex',
@@ -361,18 +479,18 @@ export function App() {
           flexWrap: 'wrap',
           gap: '20px',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          paddingBottom: '24px',
-          marginBottom: '36px'
+          paddingBottom: '20px',
+          marginBottom: '32px'
         }}>
           <div>
             <div style={{ fontSize: '11px', color: '#00E5FF', fontWeight: 800, letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
-              RELEASES & ARCHITECTURE BENCHMARKS
+              {t.catTag}
             </div>
-            <h2 style={{ fontSize: '30px', fontWeight: 900, letterSpacing: '-0.5px' }}>
-              Production Episode Catalog
+            <h2 style={{ fontSize: '28px', fontWeight: 900, letterSpacing: '-0.5px' }}>
+              {t.catTitle}
             </h2>
             <p style={{ fontSize: '14px', color: '#9CA3AF', marginTop: '4px' }}>
-              Direct access to full videos, reproducible GitHub starters, and performance telemetry.
+              {t.catDesc}
             </p>
           </div>
 
@@ -380,44 +498,44 @@ export function App() {
             <button
               onClick={() => setFilter('all')}
               style={{
-                padding: '8px 16px',
+                padding: '7px 14px',
                 borderRadius: '6px',
-                fontSize: '13px',
+                fontSize: '12px',
                 fontWeight: 700,
                 backgroundColor: filter === 'all' ? '#00E5FF' : 'transparent',
                 color: filter === 'all' ? '#070A12' : '#9CA3AF',
                 transition: 'all 0.2s ease'
               }}
             >
-              All Releases ({episodes.length})
+              {t.filterAll} ({episodes.length})
             </button>
             <button
               onClick={() => setFilter('multi-agent')}
               style={{
-                padding: '8px 16px',
+                padding: '7px 14px',
                 borderRadius: '6px',
-                fontSize: '13px',
+                fontSize: '12px',
                 fontWeight: 700,
                 backgroundColor: filter === 'multi-agent' ? '#00E5FF' : 'transparent',
                 color: filter === 'multi-agent' ? '#070A12' : '#9CA3AF',
                 transition: 'all 0.2s ease'
               }}
             >
-              Multi-Agent (Python)
+              {t.filterAgent}
             </button>
             <button
               onClick={() => setFilter('n8n')}
               style={{
-                padding: '8px 16px',
+                padding: '7px 14px',
                 borderRadius: '6px',
-                fontSize: '13px',
+                fontSize: '12px',
                 fontWeight: 700,
                 backgroundColor: filter === 'n8n' ? '#00E5FF' : 'transparent',
                 color: filter === 'n8n' ? '#070A12' : '#9CA3AF',
                 transition: 'all 0.2s ease'
               }}
             >
-              Enterprise n8n
+              {t.filterN8n}
             </button>
           </div>
         </div>
@@ -426,7 +544,7 @@ export function App() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))',
-          gap: '30px'
+          gap: '28px'
         }}>
           {filteredEpisodes.map(ep => (
             <TiltCard3D key={ep.id} maxTilt={5}>
@@ -493,26 +611,26 @@ export function App() {
                 </div>
 
                 {/* Body Content */}
-                <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontSize: '12px', color: '#6B7280', fontWeight: 600, marginBottom: '8px' }}>
-                    RELEASED {ep.release_date}
+                <div style={{ padding: '26px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontSize: '11px', color: '#6B7280', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '8px' }}>
+                    {t.released} {ep.release_date}
                   </div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 800, lineHeight: 1.35, marginBottom: '14px' }}>
+                  <h3 style={{ fontSize: '19px', fontWeight: 800, lineHeight: 1.35, marginBottom: '12px' }}>
                     {ep.title}
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#9CA3AF', lineHeight: 1.6, marginBottom: '22px', flex: 1 }}>
+                  <p style={{ fontSize: '14px', color: '#9CA3AF', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
                     {ep.description}
                   </p>
 
                   {/* Tech Stack Pills */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '24px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '22px' }}>
                     {ep.stack.map(st => (
                       <span 
                         key={st}
                         style={{
                           backgroundColor: 'rgba(255, 255, 255, 0.04)',
                           border: '1px solid rgba(255, 255, 255, 0.08)',
-                          padding: '3px 9px',
+                          padding: '3px 8px',
                           borderRadius: '4px',
                           fontSize: '11px',
                           fontWeight: 600,
@@ -529,8 +647,8 @@ export function App() {
                     backgroundColor: 'rgba(7, 10, 18, 0.6)',
                     border: '1px solid rgba(255, 255, 255, 0.06)',
                     borderRadius: '10px',
-                    padding: '14px',
-                    marginBottom: '24px',
+                    padding: '12px',
+                    marginBottom: '22px',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(2, 1fr)',
                     gap: '10px',
@@ -559,17 +677,16 @@ export function App() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '8px',
-                        padding: '12px',
+                        padding: '11px',
                         borderRadius: '8px',
                         backgroundColor: '#EF4444',
                         color: '#FFF',
                         fontSize: '13px',
-                        fontWeight: 700,
-                        transition: 'transform 0.15s ease'
+                        fontWeight: 700
                       }}
                     >
                       <Play size={14} fill="#FFF" />
-                      <span>Watch Deep Dive</span>
+                      <span>{t.watchVideo}</span>
                     </a>
                     <a
                       href={ep.github_repo}
@@ -580,7 +697,7 @@ export function App() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '8px',
-                        padding: '12px',
+                        padding: '11px',
                         borderRadius: '8px',
                         backgroundColor: 'rgba(255, 255, 255, 0.08)',
                         border: '1px solid rgba(255, 255, 255, 0.16)',
@@ -590,7 +707,7 @@ export function App() {
                       }}
                     >
                       <Code2 size={15} color="#00E5FF" />
-                      <span>Clone Starter</span>
+                      <span>{t.cloneStarter}</span>
                     </a>
                   </div>
                 </div>
@@ -604,16 +721,16 @@ export function App() {
       <section style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: '0 24px 100px 24px'
+        padding: '0 24px 90px 24px'
       }}>
         <div style={{
           background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 15, 25, 0.95) 100%)',
           border: '1px solid rgba(0, 229, 255, 0.25)',
           borderRadius: '20px',
-          padding: '56px 40px',
+          padding: '52px 38px',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '48px',
+          gap: '44px',
           alignItems: 'center',
           boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
         }}>
@@ -630,27 +747,27 @@ export function App() {
               marginBottom: '16px'
             }}>
               <ShieldCheck size={16} />
-              <span>B2B SYSTEMS ENGINEERING & ARCHITECTURE</span>
+              <span>{t.b2bTag}</span>
             </div>
-            <h2 style={{ fontSize: '34px', fontWeight: 900, lineHeight: 1.15, marginBottom: '18px' }}>
-              Scale Custom Multi-Agent Systems in Your Enterprise
+            <h2 style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1.15, marginBottom: '16px' }}>
+              {t.b2bTitle}
             </h2>
-            <p style={{ color: '#9CA3AF', fontSize: '16px', lineHeight: 1.6, marginBottom: '28px' }}>
-              We partner directly with technical teams and founders to design and implement deterministic micro-agent swarms, Model Context Protocol servers, and enterprise automation infrastructure.
+            <p style={{ color: '#9CA3AF', fontSize: '15px', lineHeight: 1.6, marginBottom: '26px' }}>
+              {t.b2bDesc}
             </p>
 
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
                 <CheckCircle2 size={18} color="#00E5FF" />
-                <span>Custom Model Context Protocol (MCP) server development</span>
+                <span>{t.b2bBenefit1}</span>
               </li>
               <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
                 <CheckCircle2 size={18} color="#00E5FF" />
-                <span>Deterministic agent orchestration with zero context runaway</span>
+                <span>{t.b2bBenefit2}</span>
               </li>
               <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
                 <CheckCircle2 size={18} color="#00E5FF" />
-                <span>Self-healing enterprise n8n clusters and webhook processing</span>
+                <span>{t.b2bBenefit3}</span>
               </li>
             </ul>
           </div>
@@ -659,15 +776,15 @@ export function App() {
             backgroundColor: 'rgba(7, 10, 18, 0.8)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             borderRadius: '16px',
-            padding: '32px',
+            padding: '30px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '18px',
+            gap: '16px',
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
           }}>
-            <h3 style={{ fontSize: '20px', fontWeight: 800 }}>Schedule Technical Consultation</h3>
-            <p style={{ fontSize: '14px', color: '#9CA3AF', lineHeight: 1.5 }}>
-              Contact our engineering team directly for architectural reviews, proof of concepts, or enterprise consulting:
+            <h3 style={{ fontSize: '19px', fontWeight: 800 }}>{t.b2bBoxTitle}</h3>
+            <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: 1.5 }}>
+              {t.b2bBoxDesc}
             </p>
 
             <a
@@ -677,22 +794,22 @@ export function App() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                padding: '15px',
+                padding: '14px',
                 borderRadius: '8px',
                 background: 'linear-gradient(90deg, #00E5FF 0%, #0091FF 100%)',
                 color: '#070A12',
                 fontWeight: 800,
                 fontSize: '14px',
                 boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)',
-                marginTop: '10px'
+                marginTop: '8px'
               }}
             >
-              <Mail size={18} />
-              <span>Contact Architecture Lab</span>
+              <Mail size={17} />
+              <span>{t.b2bBoxBtn}</span>
             </a>
 
             <div style={{ textAlign: 'center', fontSize: '12px', color: '#6B7280' }}>
-              Direct email: <strong style={{ color: '#D1D5DB' }}>nexosailab@gmail.com</strong>
+              {t.directEmail} <strong style={{ color: '#D1D5DB' }}>nexosailab@gmail.com</strong>
             </div>
           </div>
         </div>
@@ -701,7 +818,7 @@ export function App() {
       {/* Footer */}
       <footer style={{
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '36px 24px',
+        padding: '32px 24px',
         backgroundColor: 'rgba(7, 10, 18, 0.95)',
         fontSize: '13px',
         color: '#6B7280'
@@ -709,7 +826,7 @@ export function App() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img src="/logo.png" alt="Nexos" style={{ width: '22px', height: '22px', borderRadius: '4px' }} />
-            <span>© 2026 <strong>Nexos AI Lab</strong>. Production-grade AI engineering.</span>
+            <span>© 2026 <strong>Nexos AI Lab</strong>. {t.footerNotice}</span>
           </div>
           <div style={{ display: 'flex', gap: '24px' }}>
             <a href="https://github.com/NexosAILab" target="_blank" rel="noreferrer" style={{ color: '#9CA3AF', fontWeight: 600 }}>GitHub Org</a>
