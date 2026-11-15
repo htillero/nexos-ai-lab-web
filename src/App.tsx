@@ -537,7 +537,7 @@ export function App() {
             </p>
 
             <a
-              href="mailto:contact@nexosailab.com?subject=Enterprise%20Multi-Agent%20Architecture%20Inquiry"
+              href="mailto:nexosailab@gmail.com?subject=Enterprise%20Multi-Agent%20Architecture%20Inquiry"
               style={{
                 display: 'flex',
                 alignItems: 'center',
