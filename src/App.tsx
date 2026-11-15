@@ -323,6 +323,29 @@ export function App() {
             </a>
 
             <a 
+              href="https://x.com/NexosAILab" 
+              target="_blank" 
+              rel="noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 12px',
+                borderRadius: '8px',
+                fontSize: '12px',
+                fontWeight: 700,
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: '#F3F4F6',
+                border: '1px solid rgba(255, 255, 255, 0.12)'
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              <span>X (Twitter)</span>
+            </a>
+
+            <a 
               href="https://github.com/NexosAILab" 
               target="_blank" 
               rel="noreferrer"
@@ -943,6 +966,7 @@ export function App() {
             <span>© 2026 <strong>Nexos AI Lab</strong>. {t.footerDesc}</span>
           </div>
           <div style={{ display: 'flex', gap: '24px' }}>
+            <a href="https://x.com/NexosAILab" target="_blank" rel="noreferrer" style={{ color: '#9CA3AF', fontWeight: 600 }}>X (@NexosAILab)</a>
             <a href="https://github.com/NexosAILab" target="_blank" rel="noreferrer" style={{ color: '#9CA3AF', fontWeight: 600 }}>GitHub Org</a>
             <a href="https://www.youtube.com/@NexosAILab" target="_blank" rel="noreferrer" style={{ color: '#9CA3AF', fontWeight: 600 }}>YouTube</a>
             <a href="https://github.com/htillero" target="_blank" rel="noreferrer" style={{ color: '#9CA3AF', fontWeight: 600 }}>Creator Profile</a>
