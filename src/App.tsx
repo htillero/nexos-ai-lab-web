@@ -371,33 +371,73 @@ export function App() {
           <span>{t.heroBadge}</span>
         </div>
 
-        <h1 style={{
-          fontSize: 'clamp(32px, 4.5vw, 54px)',
-          fontWeight: 900,
-          lineHeight: 1.1,
-          letterSpacing: '-1.8px',
-          marginBottom: '18px',
-          maxWidth: '880px'
-        }}>
-          {t.heroTitle1}
-          <span style={{ 
-            background: 'linear-gradient(90deg, #00E5FF 0%, #38BDF8 60%, #818CF8 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
-            {t.heroHighlight}
-          </span>
-        </h1>
-
-        <p style={{
-          fontSize: '17px',
-          color: '#9CA3AF',
-          maxWidth: '720px',
-          lineHeight: 1.6,
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '40px',
+          alignItems: 'center',
           marginBottom: '32px'
         }}>
-          {t.heroSubtitle}
-        </p>
+          <div>
+            <h1 style={{
+              fontSize: 'clamp(32px, 4.5vw, 54px)',
+              fontWeight: 900,
+              lineHeight: 1.1,
+              letterSpacing: '-1.8px',
+              marginBottom: '18px'
+            }}>
+              {t.heroTitle1}
+              <span style={{ 
+                background: 'linear-gradient(90deg, #00E5FF 0%, #38BDF8 60%, #818CF8 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                {t.heroHighlight}
+              </span>
+            </h1>
+
+            <p style={{
+              fontSize: '17px',
+              color: '#9CA3AF',
+              lineHeight: 1.6
+            }}>
+              {t.heroSubtitle}
+            </p>
+          </div>
+
+          {/* Hero 3D Showcase Image */}
+          <TiltCard3D maxTilt={6}>
+            <div style={{
+              position: 'relative',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '1px solid rgba(0, 229, 255, 0.35)',
+              boxShadow: '0 15px 45px rgba(0, 229, 255, 0.2)',
+              backgroundColor: '#070A12'
+            }}>
+              <img 
+                src="/assets/hero-3d.jpg" 
+                alt="Nexos AI Lab 3D Architecture" 
+                style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+              />
+              <div style={{
+                position: 'absolute',
+                bottom: '12px',
+                right: '12px',
+                backgroundColor: 'rgba(7, 10, 18, 0.85)',
+                backdropFilter: 'blur(8px)',
+                padding: '4px 10px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: 700,
+                color: '#00E5FF',
+                border: '1px solid rgba(0, 229, 255, 0.3)'
+              }}>
+                3D System Nexus
+              </div>
+            </div>
+          </TiltCard3D>
+        </div>
 
         {/* Scalable Architecture KPI Strip */}
         <div style={{
