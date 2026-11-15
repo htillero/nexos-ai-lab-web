@@ -3,9 +3,6 @@ import episodesData from './episodes.json';
 import { TiltCard3D } from './components/TiltCard3D';
 import { 
   Clock, 
-  ShieldCheck, 
-  CheckCircle2,
-  Mail,
   Play,
   Code2,
   Sparkles,
@@ -36,7 +33,7 @@ interface Episode {
 
 export function App() {
   const [lang, setLang] = useState<'en' | 'es'>('en');
-  const [activeTab, setActiveTab] = useState<'episodes' | 'starters' | 'standards' | 'consulting'>('episodes');
+  const [activeTab, setActiveTab] = useState<'episodes' | 'starters' | 'standards'>('episodes');
   const [filter, setFilter] = useState<'all' | 'multi-agent' | 'n8n'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -263,25 +260,6 @@ export function App() {
             >
               <BookOpen size={14} />
               <span>{t.navStandards}</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('consulting')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 14px',
-                borderRadius: '7px',
-                fontSize: '12px',
-                fontWeight: 700,
-                backgroundColor: activeTab === 'consulting' ? '#00E5FF' : 'transparent',
-                color: activeTab === 'consulting' ? '#070A12' : '#9CA3AF',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <ShieldCheck size={14} />
-              <span>{t.navConsulting}</span>
             </button>
           </nav>
 
@@ -904,99 +882,6 @@ export function App() {
                 <p style={{ color: '#D1D5DB', fontSize: '14px', lineHeight: 1.6 }}>
                   {t.rule4Desc}
                 </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 4: B2B CONSULTING */}
-        {activeTab === 'consulting' && (
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 15, 25, 0.95) 100%)',
-            border: '1px solid rgba(0, 229, 255, 0.25)',
-            borderRadius: '20px',
-            padding: '50px 36px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '40px',
-            alignItems: 'center'
-          }}>
-            <div>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                color: '#00E5FF',
-                fontSize: '11px',
-                fontWeight: 800,
-                letterSpacing: '1px',
-                textTransform: 'uppercase',
-                marginBottom: '16px'
-              }}>
-                <ShieldCheck size={16} />
-                <span>B2B SYSTEMS ARCHITECTURE</span>
-              </div>
-              <h2 style={{ fontSize: '32px', fontWeight: 900, lineHeight: 1.15, marginBottom: '16px' }}>
-                {t.consultingTitle}
-              </h2>
-              <p style={{ color: '#9CA3AF', fontSize: '15px', lineHeight: 1.6, marginBottom: '26px' }}>
-                {t.consultingSubtitle}
-              </p>
-
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
-                  <CheckCircle2 size={18} color="#00E5FF" />
-                  <span>{t.b2bFeature1}</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
-                  <CheckCircle2 size={18} color="#00E5FF" />
-                  <span>{t.b2bFeature2}</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#E5E7EB' }}>
-                  <CheckCircle2 size={18} color="#00E5FF" />
-                  <span>{t.b2bFeature3}</span>
-                </li>
-              </ul>
-            </div>
-
-            <div style={{
-              backgroundColor: 'rgba(7, 10, 18, 0.8)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '16px',
-              padding: '30px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '16px',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
-            }}>
-              <h3 style={{ fontSize: '19px', fontWeight: 800 }}>{t.scheduleBtn}</h3>
-              <p style={{ fontSize: '13px', color: '#9CA3AF', lineHeight: 1.5 }}>
-                Directly consult with our engineering lab for design reviews, proof of concepts, and scalable agent deployment:
-              </p>
-
-              <a
-                href="mailto:nexosailab@gmail.com?subject=Enterprise%20Multi-Agent%20Architecture%20Inquiry"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  padding: '14px',
-                  borderRadius: '8px',
-                  background: 'linear-gradient(90deg, #00E5FF 0%, #0091FF 100%)',
-                  color: '#070A12',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  boxShadow: '0 0 25px rgba(0, 229, 255, 0.35)',
-                  marginTop: '8px'
-                }}
-              >
-                <Mail size={17} />
-                <span>Contact Architecture Lab</span>
-              </a>
-
-              <div style={{ textAlign: 'center', fontSize: '12px', color: '#6B7280' }}>
-                Direct email: <strong style={{ color: '#D1D5DB' }}>nexosailab@gmail.com</strong>
               </div>
             </div>
           </div>
