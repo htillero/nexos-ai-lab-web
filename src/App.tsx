@@ -58,7 +58,7 @@ export function App() {
       heroTitle1: "Production Multi-Agent Systems & ",
       heroHighlight: "Deterministic Workflows.",
       heroSubtitle: "We benchmark and build resilient multi-agent swarms for enterprise environments. Microservices over monolithic bloat, zero UTC drift, and reproducible open-source starters.",
-      statEpisodes: "2 Production Videos",
+      statEpisodes: "3 Production Videos",
       statStarters: "100% Tested Starters",
       statReliability: "Zero UTC Drift",
       statProtocol: "MCP Standardized",
@@ -98,7 +98,7 @@ export function App() {
       heroTitle1: "Sistemas Multi-Agente en Producción y ",
       heroHighlight: "Flujos Deterministas.",
       heroSubtitle: "Diseñamos y medimos enjambres de agentes resilientes para entornos empresariales. Microservicios sobre monolitos inflados, cero desfase de zonas horarias y starters reproducibles.",
-      statEpisodes: "2 Videos en Producción",
+      statEpisodes: "3 Videos en Producción",
       statStarters: "Starters 100% Probados",
       statReliability: "Cero Desfase UTC",
       statProtocol: "Estándar MCP",
@@ -800,6 +800,51 @@ export function App() {
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <span style={{ fontSize: '11px', fontWeight: 800, color: '#00E5FF', textTransform: 'uppercase' }}>
+                      Python 3.12 • Hybrid RAG • BM25 + Vector
+                    </span>
+                    <GitBranch size={16} color="#00E5FF" />
+                  </div>
+                  <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>
+                    NexosAILab/hybrid-rag-mcp-starter
+                  </h3>
+                  <p style={{ color: '#9CA3AF', fontSize: '14px', lineHeight: 1.6, flex: 1, marginBottom: '20px' }}>
+                    Zero-DB Hybrid RAG server with Reciprocal Rank Fusion (RRF), BM25 lexical search, cosine vector search, and strict hallucination gating. Ships with 24 benchmark tests.
+                  </p>
+                  <a
+                    href="https://github.com/NexosAILab/hybrid-rag-mcp-starter"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      background: 'linear-gradient(135deg, #00E5FF 0%, #0091FF 100%)',
+                      color: '#070A12',
+                      fontWeight: 800,
+                      fontSize: '13px'
+                    }}
+                  >
+                    <span>Inspect Repository on GitHub</span>
+                    <ExternalLink size={14} />
+                  </a>
+                </div>
+              </TiltCard3D>
+
+              <TiltCard3D maxTilt={5}>
+                <div style={{
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(0, 229, 255, 0.3)',
+                  borderRadius: '14px',
+                  padding: '28px',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#00E5FF', textTransform: 'uppercase' }}>
                       Python 3.12 • MCP Core
                     </span>
                     <GitBranch size={16} color="#00E5FF" />
@@ -821,8 +866,9 @@ export function App() {
                       gap: '8px',
                       padding: '12px',
                       borderRadius: '8px',
-                      background: 'linear-gradient(135deg, #00E5FF 0%, #0091FF 100%)',
-                      color: '#070A12',
+                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.16)',
+                      color: '#FFF',
                       fontWeight: 800,
                       fontSize: '13px'
                     }}

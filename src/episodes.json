@@ -1,5 +1,32 @@
 [
   {
+    "id": "VID_003",
+    "title": "Build a Hybrid RAG MCP Server in Pure Python (BM25 + Vector + Reciprocal Rank Fusion)",
+    "description": "Production Hybrid RAG server with Reciprocal Rank Fusion and deterministic hallucination gating. Zero external vector databases, pure standard library math, and complete 24/24 benchmark precision.",
+    "track": "Multi-Agent Systems (Python + MCP)",
+    "track_slug": "multi-agent",
+    "youtube_url": "https://www.youtube.com/watch?v=eIiIE4SeRHM",
+    "video_id": "eIiIE4SeRHM",
+    "thumbnail_url": "https://img.youtube.com/vi/eIiIE4SeRHM/maxresdefault.jpg",
+    "github_repo": "https://github.com/NexosAILab/hybrid-rag-mcp-starter",
+    "release_date": "2026-11-22",
+    "duration": "10:15",
+    "stack": [
+      "Python 3.12",
+      "MCP SDK",
+      "BM25",
+      "Vector Embeddings",
+      "RRF (k=60)",
+      "Strict Gating"
+    ],
+    "metrics": {
+      "benchmark": "24/24 PASS (100%)",
+      "abstention_accuracy": "6/6 (100%)",
+      "architecture": "Zero-DB Hybrid RAG"
+    },
+    "featured": true
+  },
+  {
     "id": "VID_002",
     "title": "Build a Multi-Agent System in Python with MCP (Calendar + Memory + Slack)",
     "description": "Production architecture for distributed micro-agents in Python. Learn how Model Context Protocol (MCP) and FastAPI enable isolated, deterministic multi-agent systems without framework bloat.",
@@ -23,7 +50,7 @@
       "context_leakage": "0%",
       "architecture": "Decoupled Micro-Agents"
     },
-    "featured": true
+    "featured": false
   },
   {
     "id": "VID_001",
