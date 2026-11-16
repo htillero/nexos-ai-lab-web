@@ -623,10 +623,19 @@ export function App() {
                     }}
                   >
                     {/* Thumbnail Header */}
-                    <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', backgroundColor: '#000' }}>
+                    <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', backgroundColor: '#070A12', overflow: 'hidden' }}>
                       <img 
                         src={ep.thumbnail_url} 
                         alt={ep.title}
+                        onError={(e) => {
+                          // Resilient fallback chain if YouTube maxresdefault fails
+                          const target = e.currentTarget;
+                          if (target.src.includes('maxresdefault.jpg')) {
+                            target.src = `https://img.youtube.com/vi/${ep.video_id}/hqdefault.jpg`;
+                          } else if (target.src.includes('hqdefault.jpg')) {
+                            target.src = '/assets/VID_001_thumbnail.png';
+                          }
+                        }}
                         style={{
                           position: 'absolute',
                           top: 0,

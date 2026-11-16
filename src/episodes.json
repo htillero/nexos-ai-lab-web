@@ -60,7 +60,7 @@
     "track_slug": "n8n",
     "youtube_url": "https://www.youtube.com/watch?v=hI8xuR7S49U",
     "video_id": "hI8xuR7S49U",
-    "thumbnail_url": "https://img.youtube.com/vi/hI8xuR7S49U/maxresdefault.jpg",
+    "thumbnail_url": "/assets/VID_001_thumbnail.png",
     "github_repo": "https://github.com/NexosAILab/autonomous-agent-starter",
     "release_date": "2026-11-14",
     "duration": "08:10",
