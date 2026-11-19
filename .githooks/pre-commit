@@ -1,0 +1,80 @@
+#!/bin/bash
+# pre-commit - escaneo de secretos que BLOQUEA el commit (exit 1 real).
+#
+# Fuente canonica: Scripts/.githooks/pre-commit. Se propaga con sync-agents.ps1 y
+# `sync-agents.ps1 -Check` verifica que el hook efectivo de cada repo sea identico.
+# NO editar la copia de un repo: editar la canonica y volver a sincronizar (regla 16).
+#
+# Revisa los NOMBRES de archivo y solo las lineas AGREGADAS en este commit.
+# Falso positivo legitimo: agregar el texto  secret-ok  en esa misma linea.
+# Saltearlo con --no-verify esta prohibido (regla 17 de AGENTS.md).
+#
+# Nota tecnica: el bucle usa `done < <(...)` y NO `cmd | while`, porque en un pipe el
+# `exit` solo sale del subproceso y el commit pasaria igual (bug de la version anterior).
+
+echo "Verificando secretos..."
+found=0
+
+report() { echo "BLOQUEADO: $1 -> $2"; found=1; }
+
+PW_RE=$'IDENTIFIED[[:space:]]+BY[[:space:]]+["\'][^"\'<>&$]{6,}["\']|(password|passwd|pwd|secret|token|api[_-]?key)[[:space:]]*[:=][[:space:]]*["\'][^"\'<>&${}]{8,}["\']'
+PLACEHOLDER_RE='changeme|example|ejemplo|redact|reemplaz|tu_|your|xxxx|\*\*\*|placeholder|dummy'
+
+# 1) Archivos que nunca deben versionarse (por nombre) - validación rápida en memoria
+while IFS= read -r file; do
+    [ -z "$file" ] && continue
+    base="${file##*/}"
+    case "$base" in
+        cwallet.sso|ewallet.p12|ewallet.pem|Wallet_*.zip|*.ppk|*.pfx|id_rsa|id_ed25519|id_ecdsa)
+            report "archivo de credenciales o wallet" "$file" ;;
+    esac
+done < <(git diff --cached --name-only --diff-filter=ACM)
+
+# 2) Contenido agregado en este commit:
+# FAST-PATH: Extrae el diff unificado completo una sola vez (excluyendo .githooks).
+# Si no hay secretos en el lote (caso estándar), termina en ~200ms sin spawnear miles de subshells.
+diff_content=$(git diff --cached --no-color -U0 -- ':(exclude).githooks/*' | grep -a '^+' | grep -av '^+++' | grep -avi 'secret-ok')
+
+if [ -n "$diff_content" ]; then
+    has_secret=0
+    echo "$diff_content" | grep -aqE 'AKIA[0-9A-Z]{16}'                                      && has_secret=1
+    echo "$diff_content" | grep -aqE 'BEGIN ([A-Z]+ )?PRIVATE KEY'                           && has_secret=1
+    echo "$diff_content" | grep -aqE 'LS0tLS1CRUdJTi'                                         && has_secret=1
+    echo "$diff_content" | grep -aqE 'sk-[A-Za-z0-9]{20,}'                                    && has_secret=1
+    echo "$diff_content" | grep -aqE 'gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{20,}' && has_secret=1
+    echo "$diff_content" | grep -aqE 'AIza[0-9A-Za-z_-]{35}'                                  && has_secret=1
+    echo "$diff_content" | grep -aqE 'xox[baprs]-[A-Za-z0-9-]{10,}'                           && has_secret=1
+    if [ "$has_secret" -eq 0 ] && echo "$diff_content" | grep -aiE "$PW_RE" | grep -aviE "$PLACEHOLDER_RE" | grep -aq .; then
+        has_secret=1
+    fi
+
+    # Si se detectó algún patrón sospechoso en el diff global, localizamos el archivo exacto para reportarlo
+    if [ "$has_secret" -ne 0 ]; then
+        while IFS= read -r file; do
+            case "$file" in .githooks/*) continue ;; esac
+            added=$(git diff --cached --no-color -U0 -- "$file" | grep -a '^+' | grep -av '^+++' | grep -avi 'secret-ok')
+            [ -z "$added" ] && continue
+            echo "$added" | grep -aqE 'AKIA[0-9A-Z]{16}'                                      && report "AWS Access Key" "$file"
+            echo "$added" | grep -aqE 'BEGIN ([A-Z]+ )?PRIVATE KEY'                           && report "clave privada" "$file"
+            echo "$added" | grep -aqE 'LS0tLS1CRUdJTi'                                         && report "bloque base64 de clave privada" "$file"
+            echo "$added" | grep -aqE 'sk-[A-Za-z0-9]{20,}'                                    && report "API key (sk-)" "$file"
+            echo "$added" | grep -aqE 'gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{20,}' && report "token de GitHub" "$file"
+            echo "$added" | grep -aqE 'AIza[0-9A-Za-z_-]{35}'                                  && report "Google API key" "$file"
+            echo "$added" | grep -aqE 'xox[baprs]-[A-Za-z0-9-]{10,}'                           && report "token de Slack" "$file"
+            if echo "$added" | grep -aiE "$PW_RE" | grep -aviE "$PLACEHOLDER_RE" | grep -aq .; then
+                report "password o secreto en texto plano" "$file"
+            fi
+        done < <(git diff --cached --name-only --diff-filter=ACM)
+    fi
+fi
+
+if [ "$found" -ne 0 ]; then
+    echo ""
+    echo "Commit CANCELADO: posibles secretos detectados (regla 17 de AGENTS.md)."
+    echo "No los commitees: usa variables de entorno / OCI Vault / Credential Manager y, en docs, solo el nombre u OCID del secreto."
+    echo "Si es un falso positivo, agrega 'secret-ok' en esa linea."
+    exit 1
+fi
+
+echo "OK: sin secretos detectados"
+exit 0

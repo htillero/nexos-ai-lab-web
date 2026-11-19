@@ -1,0 +1,27 @@
+#!/bin/bash
+# post-commit / post-merge - refresca el grafo de graphify (SOLO codigo, sin LLM, sin red).
+#
+# Fuente canonica: Scripts/.githooks/post-commit (post-merge es una copia identica).
+# Se propaga con sync-agents.ps1 y `sync-agents.ps1 -Check` verifica que no haya deriva (regla 15/16).
+# NO editar la copia de un repo: editar la canonica y volver a sincronizar.
+#
+# Reglas de seguridad de este hook:
+#   - Solo actua si el repo YA tiene grafo (graphify-out/graph.json); no crea grafos nuevos.
+#   - Corre en segundo plano y siempre sale con 0: jamas demora ni rompe un commit/pull.
+#   - Un lock evita corridas superpuestas (se ignora si tiene mas de 30 min).
+#   - `graphify update` solo re-extrae archivos de codigo (AST local): no usa LLM ni API key.
+
+export PATH="$HOME/.local/bin:$PATH"
+
+root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+[ -f "$root/graphify-out/graph.json" ] || exit 0
+command -v graphify >/dev/null 2>&1 || exit 0
+
+lock="$root/graphify-out/.update.lock"
+if [ -f "$lock" ] && [ -z "$(find "$lock" -mmin +30 2>/dev/null)" ]; then
+    exit 0
+fi
+
+nohup bash -c 'touch "$1/graphify-out/.update.lock"; cd "$1" && timeout 900 graphify update . >/dev/null 2>&1; rm -f "$1/graphify-out/.update.lock"' _ "$root" >/dev/null 2>&1 &
+disown 2>/dev/null
+exit 0

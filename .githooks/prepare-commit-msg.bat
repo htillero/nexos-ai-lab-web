@@ -1,0 +1,2 @@
+@echo off
+pwsh -NoProfile -Command "$f='%1'; $o=[bool](gci env:|?{$_.Name-like'*OPENCODE*'-or$_.Name-like'*ANOMALYCO*'}); $c=[bool](gci env:|?{$_.Name-like'*CLAUDE*'-or$_.Name-eq'ANTHROPIC_API_KEY'}); if($o){$n='Opencode';$e='noreply@opencode.ai'}elseif($c){$n='Claude Code';$e='noreply@anthropic.com'}else{exit 0}; $m=gc $f -Raw; if($m-match'🤖 IA:'){exit 0}; $m=$m.TrimEnd()+\"`n`n🤖 IA: $n`n`nCo-Authored-By: $n <$e>`n\"; sc $f $m"
