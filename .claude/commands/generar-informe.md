@@ -11,6 +11,7 @@ Generá un informe de cierre en Word (`.docx`) para el trabajo recién terminado
 - ADRs creados en el vault durante el trabajo (`02 - Decisiones/`)
 - Si el repo organiza el trabajo en tickets/pedidos (`projects/<ID>/`), tomar el contexto de ESE ticket puntual, no de todo el repo
 - Si el ticket tiene `bitacora.sqlnb` (propia o de sus hijos con SQL; regla 29), leer sus **celdas markdown y SQL**: es la fuente de los pasos reproducibles (qué se consultó, qué se aplicó y el orden), con las secciones 📸 Antes → Aplicar → Después. No hay resultados guardados (`saveOutputs: false`).
+- Si el `README.md` del caso tiene la sección «Investigación asistida» (DeepSearch, regla 31), llevarla al informe: consulta, cuaderno, modo, fecha, fuentes usadas con su estado de verificación y fuentes descartadas con el motivo. Lo «no verificado» se marca como tal y nunca se presenta como hecho.
 
 ### 2. Determinar destino
 Hay solo dos cuadernos (ver `00 - Meta/NotebookLM`), replicados en las cuentas `default` y `bago_corp`. Mirar dónde vive la nota del proyecto en el vault:
